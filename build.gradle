@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.0.RELEASE'
+        springBootVersion = '2.1.7.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.song.woo'
+group = 'com.web.admin'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.11
 
@@ -29,11 +29,17 @@ configurations {
 
 dependencies {
     //implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    /*
+    인텔리제이 기준 적용방법 (gradle 4.x 기준)
+    1.의존성 추가
+    2.lombok 플러그인을 추가
+    3.Settings > Build .. > compiler > annotationProcessor >  enable annotation processing 체크
+    */
+    compile('org.projectlombok:lombok')
     //providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
     //implementation("org.mariadb.jdbc:mariadb-java-client")
     //runtimeOnly('com.h2database:h2')
-    //compileOnly('org.projectlombok:lombok')
 }
