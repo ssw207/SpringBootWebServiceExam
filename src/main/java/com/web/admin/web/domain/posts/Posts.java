@@ -1,5 +1,6 @@
 package com.web.admin.web.domain.posts;
 
+import com.web.admin.web.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Posts {
+public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 테이블별 시퀀스 자동증가
     private Long id;
