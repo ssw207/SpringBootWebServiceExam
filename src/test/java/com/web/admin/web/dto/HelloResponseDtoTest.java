@@ -1,7 +1,7 @@
 package com.web.admin.web.dto;
 
 import org.junit.Test;
-// 인텔리제이 기준 자동 import되지 않아 직접 입력. 자동import 방법 찾아볼것
+// 인텔리제이 기준 자동 import되지 않아 직접 입력. 자동import 방법 찾아볼것 => asertThat()입력후 alt + enter
 import static org.assertj.core.api.Assertions.assertThat;
 public class HelloResponseDtoTest {
 

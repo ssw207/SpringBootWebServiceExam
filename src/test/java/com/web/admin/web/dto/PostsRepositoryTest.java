@@ -1,4 +1,4 @@
-package com.web.admin.web;
+package com.web.admin.web.dto;
 
 import com.web.admin.web.domain.posts.Posts;
 import com.web.admin.web.domain.posts.PostsRepository;
@@ -33,14 +33,34 @@ public class PostsRepositoryTest {
         String title = "myTitle";
 
         //when
-        /*
-        repository.save()는 id값이 있으면 update, 없으면 insert 수행
-         */
+        //repository.save()는 id값이 있으면 update, 없으면 insert 수행
         postsRepository.save(Posts.builder() 
                                 .author(author)
                                 .content(content)
                                 .title(title)
                                 .build());
+        //then
+        List<Posts> postList = postsRepository.findAll();
+        Posts posts = postList.get(0);
+        assertThat(posts.getAuthor()).isEqualTo(author);
+        assertThat(posts.getContent()).isEqualTo(content);
+        assertThat(posts.getTitle()).isEqualTo(title);
+    }
+
+    @Test
+    public void 게시글수정() {
+        //givne
+        String author = "myAuthor";
+        String content = "myContent";
+        String title = "myTitle";
+
+        //when
+        //repository.save()는 id값이 있으면 update, 없으면 insert 수행
+        postsRepository.save(Posts.builder()
+                .author(author)
+                .content(content)
+                .title(title)
+                .build());
         //then
         List<Posts> postList = postsRepository.findAll();
         Posts posts = postList.get(0);
