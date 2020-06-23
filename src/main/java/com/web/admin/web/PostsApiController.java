@@ -1,6 +1,6 @@
 package com.web.admin.web;
 
-import com.web.admin.web.dto.PostsReponseDto;
+import com.web.admin.web.dto.PostsResponseDto;
 import com.web.admin.web.dto.PostsSaveRequestDto;
 import com.web.admin.web.service.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,13 @@ public class PostsApiController {
     }
 
     @GetMapping("/api/v1/posts/{id}")
-    public PostsReponseDto get(@PathVariable("id") Long id) {
-        log.info("수정시작 {}",id);
+    public PostsResponseDto get(@PathVariable("id") Long id) {
         return postsService.get(id);
+    }
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable("id") Long id) {
+        postsService.delete(id);
+        return id;
     }
 }
