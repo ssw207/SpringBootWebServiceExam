@@ -5,6 +5,7 @@ import com.web.admin.config.auth.dto.SessionUser;
 import com.web.admin.web.domain.user.User;
 import com.web.admin.web.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,6 +21,7 @@ import java.util.Collections;
 /**
  * OAuth인증 성공후 후속 처리 클래스
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -28,13 +30,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.debug("OAuth인증 성공!! 유저 정보조회 시작");
+        
         OAuth2UserService delegate = new DefaultOAuth2UserService(); // ?
         OAuth2User oAuth2User = delegate.loadUser(userRequest); // ?
 
         //OAuth2 서비스 ID (구글,네이버,카카오...)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        //PK
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName(); // ?
+        log.debug("소셜로그인 종류:{}, pk:{}",registrationId, userNameAttributeName);
         //OAuth2 유저 정보
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes()); // ?
 
@@ -42,7 +46,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         User user = saveOrUpdate(attributes);
         //세션에 유저정보 저장
         httpSession.setAttribute("user", new SessionUser(user)); // SessionUser는
-
         //??
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey()))
                                     , attributes.getAttirbutes()
@@ -50,10 +53,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        return userRepository.findByEmail(attributes.getEmail())
+        User user =  userRepository.findByEmail(attributes.getEmail())
                         .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                         .orElse(attributes.toEntity());
+        log.debug("소셜로그인 성공후 사용자 정보 저장/엽데이트 : {}",user);
+        return userRepository.save(user);
     }
-
-
 }

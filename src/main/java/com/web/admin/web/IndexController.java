@@ -1,6 +1,6 @@
 package com.web.admin.web;
 
-import com.web.admin.web.domain.user.User;
+import com.web.admin.config.auth.dto.SessionUser;
 import com.web.admin.web.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("posts",postsService.findAllDesc());
-        User user = (User)httpSession.getAttribute("user");
+        SessionUser user = (SessionUser)httpSession.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName",user.getName());
         }
