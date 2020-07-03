@@ -31,6 +31,9 @@ dependencies {
     //implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile group: 'org.springframework.security', name: 'spring-security-test'
+
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
     /*
     인텔리제이 기준 적용방법 (gradle 4.x 기준)

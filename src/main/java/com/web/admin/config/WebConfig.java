@@ -1,5 +1,6 @@
-package com.web.admin.config.auth;
+package com.web.admin.config;
 
+import com.web.admin.config.auth.LoginUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
