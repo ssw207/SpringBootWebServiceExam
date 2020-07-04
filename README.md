@@ -126,4 +126,57 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - 배포 스크립트 작성
   - 프로젝트내 `script/deploy.sh` 참조
   - `vim deploy.sh`
-  
+  - gitinore에 제외된 application-oauth.properties 파일생성  
+      ```bash
+      cd /home/ec2-user/app/step1 &&
+      mkdir properties &&
+      cd properties &&
+      vim ./application-oauth.properties;
+      ```  
+  - jar 실행시 추가한 properties 참조하도록 `deply.sh` 스크립트 수정
+      ```bash
+      nohup java -jar \
+          -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties \
+           $REPOSITORY/$JAR_NAME 2>&1 &
+      ```
+- DB변경 (h2 -> mariadb) 
+  - 테이블 생성
+    - h2에서 자동생성됐던 테이블 직접 생성
+    - posts, users 
+      - 로컬에서 application run후 create sql 복사
+    - spring-session
+      - `ctrl + shift + n` > `schema-mysql` 검색
+    - SQL 
+        ```mariadb
+        use springboot_webservice;
+        create table posts (id bigint not null auto_increment, created_date datetime, modified_date datetime, author varchar(255), content TEXT not null, title varchar(500) not null, primary key (id)) engine=InnoDB;
+        create table user (id bigint not null auto_increment, created_date datetime, modified_date datetime, email varchar(255) not null, name varchar(255) not null, picture varchar(255), role varchar(255) not null, primary key (id)) engine=InnoDB;
+        
+        CREATE TABLE SPRING_SESSION (
+                                        PRIMARY_ID CHAR(36) NOT NULL,
+                                        SESSION_ID CHAR(36) NOT NULL,
+                                        CREATION_TIME BIGINT NOT NULL,
+                                        LAST_ACCESS_TIME BIGINT NOT NULL,
+                                        MAX_INACTIVE_INTERVAL INT NOT NULL,
+                                        EXPIRY_TIME BIGINT NOT NULL,
+                                        PRINCIPAL_NAME VARCHAR(100),
+                                        CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
+        ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+        
+        CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (SESSION_ID);
+        CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
+        CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
+        
+        CREATE TABLE SPRING_SESSION_ATTRIBUTES (
+                                                   SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+                                                   ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+                                                   ATTRIBUTE_BYTES BLOB NOT NULL,
+                                                   CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+                                                   CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+        ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+        commit ;
+        ```
+  - 프로젝트 설정
+    - mariadb 드라이버 추가
+  - EC2설정
+    - DB설정정보파일 추가
