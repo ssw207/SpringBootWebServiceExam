@@ -33,21 +33,22 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     - java 1.8 선택
     - java -version 
 - 타임존 변경
-  - EC2서버의 기본타임존은 UTC로(세계표준시간) 한국시간대가 아님(9시간차이)
-    - java 에서 생성시간도 서버기준을 따라가므로 변경처리
-    - `sudo rm /etc/localtime`
-    - `sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime`
-    - 확인 `date`
+  - EC2서버의 기본타임존은 UTC로(세계표준시간) 한국시간대가 아님(9시간차이) java 에서 생성시간도 서버기준을 따라가므로 변경처리
+  ```bash
+  sudo rm /etc/localtime
+  sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+  date
+  ```
 - 호스트네임 변경
   - 변경한 HOSTNAME으로 호스트명이 변경
     - `sudo vim /etc/sysconfig/network`
-      ```$xslt
+      ```bash
       #변경전
       NETWORKING=yes
       HOSTNAME=localhost.localdomain
       NOZEROCONF=yes
       ```
-      ```$xslt
+      ```bash
       #변경후
       NETWORKING=yes
       HOSTNAME=springboot-webservice
@@ -57,7 +58,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
       - sudo reboot
   - 호스트 파일에 변경한 HOSTNAME등록
     - `sudo vim /etc/hosts`
-        ```$xslt
+        ```bash
         ...
         
         127.0.0.1   springboot-webservice
@@ -81,26 +82,29 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   - EC2 보안그룹 인바운드 추가
   - 내 IP ssh추가
 - ide에서 db 인코딩 변경
-    ```$xslt
-   show variables like 'c%';
-   
-   alter database springboot_webservice
-   character set ='utf8mb4'
-   collate = 'utf8mb4_general_ci';
-   
-   select @@time_zone, now();
-   
-   create table test (
+    ```mariadb
+     show databases ;
+     use springboot_webservice;
+     show variables like 'c%';
+     
+     alter database springboot_webservice
+         character set ='utf8mb4'
+         collate = 'utf8mb4_general_ci';
+     commit;
+     
+     select @@time_zone, now();
+     
+     create table test (
        id bigint(20) not null auto_increment,
        content varchar(20) default null,
        primary key (id)
-   ) engine = InnoDB;
-   
-   insert into test (content)
-   values ('테스트');
-   
-   select *
-   from test;
+     ) engine = InnoDB;
+     
+     insert into test (content)
+     values ('테스트');
+     
+     select *
+     from test;
     ```
 - ec2에서 db접속 테스트
   - `sudo yum install mysql`
@@ -109,10 +113,17 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   
 ### EC2 서버 배포
 - 프로젝트 clone
-  - `sudo yum install git`
-  - `mkdir ~/app && mkdir ~/app/step1`
-  - `cd ~/app/step1`
-  - `git clone https://github.com/ssw207/SpringBootWebServiceExam.git`
-  - `cd SpringBootWebServiceExam`
-  - `chmod +x ./gradlew`
-  - `./gradlew test`
+    ```bash
+    sudo yum -y install git &&
+    mkdir ~/app && mkdir ~/app/step1 &&
+    cd ~/app/step1 &&
+    git clone https://github.com/ssw207/SpringBootWebServiceExam.git &&
+    cd SpringBootWebServiceExam &&
+    chmod +x ./gradlew &&
+    ./gradlew test
+    ```
+  
+- 배포 스크립트 작성
+  - 프로젝트내 `script/deploy.sh` 참조
+  - `vim deploy.sh`
+  
