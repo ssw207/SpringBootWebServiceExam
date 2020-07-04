@@ -3,7 +3,7 @@
 REPOSITORY=/home/ec2-user/app/step1
 PROJECT_NAME=SpringBootWebServiceExam
 
-cp $REPOSITORY/$PROJECT_NAME/
+cd $REPOSITORY/$PROJECT_NAME/
 
 echo "> Build 파일 복사"
 
@@ -37,7 +37,7 @@ fi
 
 echo "> 새 어플리케이션 배포"
 
-JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/ | grep *.jar | tail -n 1)
 
 echo "> JAR Name: $JAR_NAME"
 
