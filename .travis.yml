@@ -22,7 +22,7 @@ before_install:
 before_deploy:
   - zip -r springboot-webservice * # 현재위치에 지정한 이름으로 압축
   - mkdir -p deploy # TtravisCI가 실행중인 위치에 폴더생성
-  - mv springboot-webservice deploy/springboot-webservice.zip
+  - mv springboot-webservice.zip deploy/springboot-webservice.zip
 
 # S3업로드, codeDeploy로 배포등 외부서비스와 연동할 행위를 선언
 deploy:
