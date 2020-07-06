@@ -12,8 +12,8 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - spring-session-jdbc
 - h2
 
-### AWS 세팅
-#### AWS 인스턴스 생성, 로컬 개발환경 구축
+## AWS 세팅
+### AWS 인스턴스 생성, 로컬 개발환경 구축
 - AWS 프리티어 계정생성
 - EC2 인스턴스 생성
 - 인스턴스에 탄력적IP 등록
@@ -26,7 +26,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
         - session ec2-user@아이피, port:22, save 클릭
     - xshell 사용
 
-#### AWS EC2 서버 세팅
+### AWS EC2 서버 세팅
 - 기본 java 7로 설정되어있으므로 8설치후 변경 
   - `sudo yum install -y java-1.8.0-openjdk-devel.x86_64`
   - `sudo /usr/sbin/alternatives --config java` 
@@ -68,7 +68,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
      - 성공시 80포트로 접속이 되지않는다는 메시지 출력
        - `curl: (7) Failed to connect to springboot-webservice port 80: Connection refused`
 
-#### AWS RDS세팅
+### AWS RDS세팅
 - RDS > 파라미터그룹 생성
   - 타임존
     - `time_zone` 
@@ -111,7 +111,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   - `sudo mysql -u 계정 -p -h 호스트`
   - `show databases`
   
-### EC2 서버 배포
+## EC2 서버 배포
 - 프로젝트 clone
     ```bash
     sudo yum -y install git &&
@@ -183,11 +183,15 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     - DB설정정보파일 추가
     
 - EC2에서 소셜로그인
-- TravisCI 연동 
+## TravisCI 연동 
   - 연동할프로젝트 활성화
   - travis.yml 작성
   - AWS IAM 사용자 등록
     - s3권한추가
     - codeDeploy 권한추가
     - Name태그 추가
-  - TravisCI에 AWS 사용자 키 추가
+  - TravisCI에 AWS 사용자 키 환경변수 추가. 추가한 환경변수는 $변수명 으로 `travis.yml`에서 사용가능
+    - 등록된 repository 설정에 환경변수 추가
+      - AWS_ACCESS_KEY
+      - AWS_SECRET_KEY
+  - S3버킷 생성
