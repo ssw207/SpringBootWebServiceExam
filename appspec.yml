@@ -5,8 +5,14 @@ files:
     destination: /home/ec2-user/app/step2/zip/
     overwrite: yes
 
+#permissions:
+#  - obejct: /
+#    pattern: "**"
+#    owner: ec2-user
+#    group: ec2-user
+
 permissions:
-  - obejct: /
+  - object: /
     pattern: "**"
     owner: ec2-user
     group: ec2-user
