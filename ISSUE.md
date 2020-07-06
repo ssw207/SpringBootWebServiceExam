@@ -82,3 +82,4 @@ testCompile('org.springframework.security:spring-security-test')
 1. CodeDeploy에서 EC2로 파일을 정상적으로 생성됨
    - 생성된 파일들의 권한이 `root` `appspec.yml`에작성한 대로면 `ec2-user` 권한으로 파일이 생성되어야함.
    - `appspec.yml` 작성오류 추정
+1. `appspec.yml` permission -> permissions 오타수정
