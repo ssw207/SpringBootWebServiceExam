@@ -184,14 +184,38 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     
 - EC2에서 소셜로그인
 ## TravisCI 연동 
-  - 연동할프로젝트 활성화
-  - travis.yml 작성
-  - AWS IAM 사용자 등록
-    - s3권한추가
-    - codeDeploy 권한추가
-    - Name태그 추가
-  - TravisCI에 AWS 사용자 키 환경변수 추가. 추가한 환경변수는 $변수명 으로 `travis.yml`에서 사용가능
-    - 등록된 repository 설정에 환경변수 추가
-      - AWS_ACCESS_KEY
-      - AWS_SECRET_KEY
-  - S3버킷 생성
+- 연동할프로젝트 활성화
+- travis.yml 작성
+- AWS IAM 사용자 등록
+- s3권한추가
+- codeDeploy 권한추가
+- Name태그 추가
+- TravisCI에 AWS 사용자 키 환경변수 추가. 추가한 환경변수는 $변수명 으로 `travis.yml`에서 사용가능
+- 등록된 repository 설정에 환경변수 추가
+  - AWS_ACCESS_KEY
+  - AWS_SECRET_KEY
+- S3버킷 생성
+
+# CodeDeploy 연동
+- IAM - 역할 - 서비스 - EC2 - 권한 `AmazonEC2RoleforAWSCodeDeploy` 추가
+  - 역할은 지정된 영역에서만 적용가능 EC2선택시 EC2에서만 적용되는 권한임
+- EC2 - 인스턴스 우클릭 - IAM 연결 - 인스턴스 재부팅
+- EC2 서버에 codeDeploy 에이전트 설치
+    ```bash
+    aws s3 cp s3://aws-codedeploy-ap-northeast-2/latest/install . --region ap-northeast-2 &&
+    chmod +x ./install &&
+    sudo ./install auto &&
+    sudo service codedeploy-agent status
+    ```    
+- CodeDeploy IAM 권한생성
+  - IAM - 역할 - CodeDeploy 
+- AWS CodeDeploy 서비스 생성
+  - 로드벨런서 사용안함
+
+## TravisCI, S3, CodeDeploy 연동
+- EC2 접속후 S3의 빌드파일을 다운받을 폴더 생성
+    ```bash
+    mkdir ~/app/step2 && mkdir ~/app/step2/zip
+    ```
+- CodeDeploy 설정 파일 `appspec.yml` 작성
+- `.travis.yml` 수정
