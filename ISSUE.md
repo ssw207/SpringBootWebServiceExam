@@ -30,4 +30,10 @@ The command "eval ./gradlew assemble " failed 3 times.
 The command "./gradlew assemble" failed and exited with 126 during .
 Your build has been stopped.
 ```
-- TravisCI가 ./gradlew 를 실행할 권한이 없어서 발생한 문제로 추정 
+- TravisCI가 ./gradlew 를 실행할 권한이 없어서 발생한 문제로 발생 `travis.yml`파일에 아래 코드 추가
+```mariadb
+...
+
+before_install: // master브랜치에 push할 경우 travisCI에서 ./gradlew를 실행할 권한이 없는경우 에러가 발생하므로 추가
+  - chmod +x gradlew
+```

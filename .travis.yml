@@ -12,10 +12,10 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
+script: "./gradlew clean build"
+
 before_install: // master브랜치에 push할 경우 travisCI에서 ./gradlew를 실행할 권한이 없는경우 에러가 발생하므로 추가
   - chmod +x gradlew
-
-script: "./gradlew clean build"
 
 # CI 실행 완료시 메일로 알람
 notifications:
