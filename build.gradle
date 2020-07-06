@@ -4,7 +4,7 @@ buildscript {
     }
     repositories {
         mavenCentral()
-        jcenter()
+        jcenter() // mavenCentral 상위 저장소
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")

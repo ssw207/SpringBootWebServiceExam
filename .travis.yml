@@ -18,6 +18,24 @@ script: "./gradlew clean build"
 before_install:
   - chmod +x gradlew
 
+#deploy 명령어 실행전 실행. codeDeploy가 jar파일을 인식못하므로 jar+ 기타파일 설정을 zip으로 압축
+before_deploy:
+  - zip -r springboot-webservice # 현재위치에 지정한 이름으로 압축
+  - mkdir -p deploy # TtravisCI가 실행중인 위치에 폴더생성
+  - mv springboot-webservice deploy/springboot-webservice.zip
+
+# S3업로드, codeDeploy로 배포등 외부서비스와 연동할 행위를 선언
+deploy:
+  - provider: s3 # S3로 전송
+    access_key_id: $AWS_ACCESS_KEY # TravisCI repo 세팅에 저장된값
+    secret_access_key: $AWS_SECRET_KEY # TravisCI repo 세팅에 저장된값
+    bucket: swsong-springboot-webservice-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private # zip 파일 접근을 private로
+    local_dir: deploy # before_deploy에서 생성한 dir
+    wait_until-deployed: true
+
 # CI 실행 완료시 메일로 알람
 notifications:
   email:
