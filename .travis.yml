@@ -48,7 +48,7 @@ deploy:
     build_type: zip # 압축확장자
     application: springboot-webservice # AWS 웹콘솔에 등록한 어플리케이션
 
-    deploy_group: springboot-webservice-group # AWS 웹콘솔에 등록한 그룹
+    deployment_group: springboot-webservice-group # AWS 웹콘솔에 등록한 그룹
 
     region: ap-northeast-2
     wait_until-deployed: true
