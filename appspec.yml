@@ -19,7 +19,7 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: /home/ec2-user/app/step2/zip/deploy.sh
+    - location: deploy.sh
       timeout: 60
       runas: ec2-user
 
