@@ -1,9 +1,10 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.7.RELEASE'
+        springBootVersion = '2.1.9.RELEASE'
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -21,6 +22,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 configurations {
@@ -28,13 +30,7 @@ configurations {
 }
 
 dependencies {
-    //implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile group: 'org.springframework.security', name: 'spring-security-test'
-
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
     /*
     인텔리제이 기준 적용방법 (gradle 4.x 기준)
     1.의존성 추가
@@ -43,9 +39,15 @@ dependencies {
     */
     compile('org.projectlombok:lombok')
     compile('org.springframework.boot:spring-boot-starter-data-jpa') // spring boot 버전에 따라 jpa관련 라이브러리 관리
-    compile('com.h2database:h2')
     compile('org.springframework.boot:spring-boot-starter-mustache')
+    compile('com.h2database:h2')
+
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')
     compile('org.springframework.session:spring-session-jdbc') // 세션 db저장 관련 라이브러리
-    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client'
+
+    compile('org.mariadb.jdbc:mariadb-java-client')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.security:spring-security-test')
+    //runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
