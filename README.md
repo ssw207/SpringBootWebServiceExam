@@ -186,3 +186,8 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - TravisCI 연동 
   - 연동할프로젝트 활성화
   - travis.yml 작성
+  - AWS IAM 사용자 등록
+    - s3권한추가
+    - codeDeploy 권한추가
+    - Name태그 추가
+  - TravisCI에 AWS 사용자 키 추가
