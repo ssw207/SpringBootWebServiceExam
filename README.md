@@ -136,8 +136,9 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   - jar 실행시 추가한 properties 참조하도록 `deply.sh` 스크립트 수정
       ```bash
       nohup java -jar \
-          -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties \
-           $REPOSITORY/$JAR_NAME 2>&1 &
+          -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/properties/application-oauth.properties,/home/ec2-user/app/properties/application-real-db.properties \
+          -Dspring.profiles.active=real \
+          $REPOSITORY/$JAR_NAME 2>&1 &
       ```
 - DB변경 (h2 -> mariadb) 
   - 테이블 생성
@@ -180,3 +181,8 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     - mariadb 드라이버 추가
   - EC2설정
     - DB설정정보파일 추가
+    
+- EC2에서 소셜로그인
+- TravisCI 연동 
+  - 연동할프로젝트 활성화
+  - travis.yml 작성
