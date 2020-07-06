@@ -1,9 +1,13 @@
-version: 0.0 # CodeDeploy 버전 0.0외 다른버전 사용시 오류발생
+# CodeDeploy 버전 0.0외 다른버전 사용시 오류발생
+version: 0.0
 os: linux
 files:
-  - source: / # CodeDeploy에서 전달해준 파일중 destination으로 이동할 대상을 지정. 루트(/)지정시 전체파일 옮겨짐
-    destination: /home/ec2-user/app/step2/zip/ # source에서 지정한 파일을 받을 위치
-    overwrite: yes # 기존에 파일이 있으면 덮어쓰기
+  # CodeDeploy에서 전달해준 파일중 destination으로 이동할 대상을 지정. 루트(/)지정시 전체파일 옮겨짐
+  - source: /
+    # source에서 지정한 파일을 받을 위치
+    destination: /home/ec2-user/app/step2/zip/
+    # 기존에 파일이 있으면 덮어쓰기
+    overwrite: yes
 # codedeploy가 ec2로 넘겨준 파일을 ec2-user 권한을 갖도록함
 permission:
   - obejct: /
@@ -12,7 +16,11 @@ permission:
     group: ec2-user
 #codedeploy 배포단계에서 실행할 명령어지정
 hooks:
-  ApplicationStart: # 이 단계에서
-    - location: deploy.sh # 이파일을
-      timeout: 60 # 60초이상 걸릴시 실패로 처리
-      runas: ec2-user # 이 권한으로 실행
+  # 이 단계에서
+  ApplicationStart:
+    # 이파일을
+    - location: deploy.sh
+      # 60초이상 걸릴시 실패로 처리
+      timeout: 60
+      # 이 권한으로 실행
+      runas: ec2-user

@@ -76,3 +76,9 @@ testCompile('org.springframework.security:spring-security-test')
 1. build.gradle 의존성 부분 문법 변경
    - 터미널 ./gradlew build 시 성공 확인
 1. git commit후 TravisCI 빌드 성공 확인 
+
+# CodeDeploy 배포 성공후 deploy.sh 실행되지 않는 이슈 
+## 문제파악
+1. CodeDeploy에서 EC2로 파일을 정상적으로 생성됨
+   - 생성된 파일들의 권한이 `root` `appspec.yml`에작성한 대로면 `ec2-user` 권한으로 파일이 생성되어야함.
+   - `appspec.yml` 작성오류 추정
