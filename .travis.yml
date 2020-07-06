@@ -20,9 +20,16 @@ before_install:
 
 #deploy 명령어 실행전 실행. codeDeploy가 jar파일을 인식못하므로 jar+ 기타파일 설정을 zip으로 압축
 before_deploy:
-  - zip -r springboot-webservice * # 현재위치에 지정한 이름으로 압축
-  - mkdir -p deploy # TtravisCI가 실행중인 위치에 폴더생성
-  - mv springboot-webservice.zip deploy/springboot-webservice.zip
+#  - zip -r springboot-webservice * # 현재위치에 지정한 이름으로 압축
+#  - mkdir -p deploy # TtravisCI가 실행중인 위치에 폴더생성
+#  - mv springboot-webservice.zip deploy/springboot-webservice.zip
+  - mkdir -p before-deploy # TtravisCI가 실행중인 위치에 폴더생성. zip에 포함된 파일들을 담는다.
+  - cp scripts/*.sh before-deploy/
+  - cp appspec.yml before-deploy/
+  - cp build/libs/*.jar before-deploy/
+  - cd before-deploy && zip -r before-deploy * #before-deploy폴더 전체 압축
+  - cd ../ && mkdir -p deploy # 상위에 deploy 폴더 생성
+  - mv before-deploy/before-deploy.zip deploy/springboot-webservice.zip # deploy 폴더로 압축파일 이동
 
 # S3업로드, codeDeploy로 배포등 외부서비스와 연동할 행위를 선언
 deploy:
