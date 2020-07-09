@@ -289,7 +289,4 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   ```shell script
   vim /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log
   ```
-# 무중단 배포 이슈
-- 무중단 배포 구현이후 서버 포트가 8081인 경우 페이지 이동시 접근 거부되는 이슈
-  - AWS 인바운드 규칙에 8081, 8082 등록되지 않은것으로 추정 (실패) 
-  - 호스트가 localhost로 바뀌는것으로 보아 엔진엑스 프록시 포워딩시 헤더세팅문제로 추정
+  - `curl -I localhost:8081` 명령어로 헤더 변경 확인 

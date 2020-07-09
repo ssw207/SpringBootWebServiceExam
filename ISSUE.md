@@ -84,3 +84,10 @@ testCompile('org.springframework.security:spring-security-test')
    - `appspec.yml` 작성오류 추정
 1. `appspec.yml` permission -> permissions 오타수정, obejct -> object 오타수정
 1. `appspec.yml`에 codedeploy가 전달한 파일의 실행권한을 주도록 추가
+
+# 무중단 배포 리버스 프록시 이슈
+- 무중단 배포 구현이후 서버 포트가 8081인 경우 페이지 이동시 접근 거부되는 이슈
+  - AWS 인바운드 규칙에 8081, 8082 등록되지 않은것으로 추정 (실패) 
+  - 호스트가 localhost로 바뀌는것으로 보아 엔진엑스 프록시 포워딩시 헤더세팅문제로 추정
+  - `curl -I localhost:8082` 명령어로 확인결과 헤더세팅 되지 않음
+  - prox_host 오타 수정으로 해결
