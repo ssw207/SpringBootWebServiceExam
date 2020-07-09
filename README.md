@@ -34,7 +34,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     - java -version 
 - 타임존 변경
   - EC2서버의 기본타임존은 UTC로(세계표준시간) 한국시간대가 아님(9시간차이) java 에서 생성시간도 서버기준을 따라가므로 변경처리
-  ```bash
+  ```shell script
   sudo rm /etc/localtime
   sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
   date
@@ -42,13 +42,13 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - 호스트네임 변경
   - 변경한 HOSTNAME으로 호스트명이 변경
     - `sudo vim /etc/sysconfig/network`
-      ```bash
+      ```shell script
       #변경전
       NETWORKING=yes
       HOSTNAME=localhost.localdomain
       NOZEROCONF=yes
       ```
-      ```bash
+      ```shell script
       #변경후
       NETWORKING=yes
       HOSTNAME=springboot-webservice
@@ -58,7 +58,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
       - sudo reboot
   - 호스트 파일에 변경한 HOSTNAME등록
     - `sudo vim /etc/hosts`
-        ```bash
+        ```shell script
         ...
         
         127.0.0.1   springboot-webservice
@@ -113,7 +113,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   
 ## EC2 서버 배포
 - 프로젝트 clone
-    ```bash
+    ```shell script
     sudo yum -y install git &&
     mkdir ~/app && mkdir ~/app/step1 &&
     cd ~/app/step1 &&
@@ -127,14 +127,14 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   - 프로젝트내 `script/deploy.sh` 참조
   - `vim deploy.sh`
   - gitinore에 제외된 application-oauth.properties 파일생성  
-      ```bash
+      ```shell script
       cd /home/ec2-user/app/step1 &&
       mkdir properties &&
       cd properties &&
       vim ./application-oauth.properties;
       ```  
   - jar 실행시 추가한 properties 참조하도록 `deply.sh` 스크립트 수정
-      ```bash
+      ```shell script
       nohup java -jar \
           -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/properties/application-oauth.properties,/home/ec2-user/app/properties/application-real-db.properties \
           -Dspring.profiles.active=real \
@@ -214,7 +214,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 
 ## TravisCI, S3, CodeDeploy 연동
 - EC2 접속후 S3의 빌드파일을 다운받을 폴더 생성
-    ```bash
+    ```shell script
     mkdir ~/app/step2 && mkdir ~/app/step2/zip
     ```
 - CodeDeploy 설정 파일 `appspec.yml` 작성
@@ -223,7 +223,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 
 ## 무중단 배포 구현
 - 엔진엑스 설치
-    ```bash
+    ```shell script
     sudo yum install nginx -y &&
     sudo service nginx start 
     ```
@@ -234,7 +234,7 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - SpringBoot 엔진엑스 연동
   - 엔진엑스 설정파일 수정
     - sudo vim /etc/nginx//nginx.conf
-    ```bash
+    ```shell script
     ...
     
     location / {
@@ -247,13 +247,41 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     }
     ```
   - 엔진엑스 재시작
-    ```bash
+    ```shell script
     sudo service nginx restart
     ```
 
-## 프로필 기능 추가
-- 활성프로필을 조회하는 컨트롤러 추가
-- 컨트롤러를 시큐리티에 인증 예외로 등록
-- 무중단 배포를 위한 프로필 추가
-  - real1, real2
-  
+- 프로필 기능추가
+  - 활성프로필을 조회하는 컨트롤러 추가
+  - 컨트롤러를 시큐리티에 인증 예외로 등록
+  - 무중단 배포를 위한 프로필 추가
+    - real1, real2
+  - 엔진엑스의 서비스 주소 관련된 파일 생성
+    ```shell script
+    sudo vim /etc/nginx/conf.d/service_url.inc
+    ```
+    ```shell script
+    set $service_url http://127.0.0.1:8080;
+    ```
+    ```shell script
+    sudo vim /etc/nginx/nginx.conf
+    ```
+    ```shell script
+    include /etc/nginx/conf.d/service_url.inc;
+   
+    location {
+      ...
+      
+    proxy_pass $service_url;
+      
+      ...
+    }
+    ```
+    ```shell script
+    sudo service nginx restart
+    ```
+- 무중단배포를 위한 쉘스크립트 추가, CodeDeploy 설정 변경
+  1. `/home/ec2-user/app/step3/zip/`에 배포하도록 변경
+  1. 배포가 끝나면 (AfterInstall) 엔진엑스와 연결되어 있지 않은 was를 종료하는 `stop.sh` 쉘스크립트 실행
+  1. 서버 재시작시 (ApplicationStart) 대기중인 포트번호로 마지막에 빌드된 jar파일을 실행하는 'start.sh' 실행
+  1. 서버검증시 (ValidateService) was가 정상인지 확인후 엔진엑스의 서비스 포트를 변경하는 `helth.sh` 실행
