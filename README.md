@@ -285,3 +285,11 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
   1. 배포가 끝나면 (AfterInstall) 엔진엑스와 연결되어 있지 않은 was를 종료하는 `stop.sh` 쉘스크립트 실행
   1. 서버 재시작시 (ApplicationStart) 대기중인 포트번호로 마지막에 빌드된 jar파일을 실행하는 'start.sh' 실행
   1. 서버검증시 (ValidateService) was가 정상인지 확인후 엔진엑스의 서비스 포트를 변경하는 `helth.sh` 실행
+- 배포후 codedeploy가 실행하는 쉘스크립트 echo확인 
+  ```shell script
+  vim /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log
+  ```
+# 무중단 배포 이슈
+- 무중단 배포 구현이후 서버 포트가 8081인 경우 페이지 이동시 접근 거부되는 이슈
+  - AWS 인바운드 규칙에 8081, 8082 등록되지 않은것으로 추정 (실패) 
+  - 호스트가 localhost로 바뀌는것으로 보아 엔진엑스 프록시 포워딩시 헤더세팅문제로 추정
