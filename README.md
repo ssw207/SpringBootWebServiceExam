@@ -219,3 +219,38 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
     ```
 - CodeDeploy 설정 파일 `appspec.yml` 작성
 - `.travis.yml` 수정
+
+
+## 무중단 배포 구현
+- 엔진엑스 설치
+    ```bash
+    sudo yum install nginx -y &&
+    sudo service nginx start 
+    ```
+- 엔진엑스 포트 보안그룹에 추가
+  - EC2 인바운드 규칙 80 포트 추가
+  - 네이버,구글 리다이렉션 주소 추가
+  
+- SpringBoot 엔진엑스 연동
+  - 엔진엑스 설정파일 수정
+    - sudo vim /etc/nginx//nginx.conf
+    ```bash
+    ...
+    
+    location / {
+        # 엔진엑스로 요청이 들어오면 localhost:8080로 전달
+        proxy_pass http://localhost:8080; 
+        # 실제요청 데이터를 header의 각 항목에 할당
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http-hosts;    
+    }
+    ```
+  - 엔진엑스 재시작
+    ```bash
+    sudo service nginx restart
+    ```
+
+## 프로필 기능 추가
+- 활성프로필을 조회하는 컨트롤러 추가
+- 컨트롤러를 시큐리티에 인증 예외로 등록
