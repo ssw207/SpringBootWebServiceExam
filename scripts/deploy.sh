@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT_NAME=springboot-webservice
+PROJECT_NAME=SpringBootWebServiceExam
 
 echo "> Build 파일 복사"
 
@@ -9,8 +9,8 @@ cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
-#프로젝트의 이름으로된 jar파일을 찾은뒤 PID를 찾음
-CURRENT_PID=$(pgrep -fl springboot-webservice | grep jar | awk '{print $1}')
+#프로젝트의 이름으로된 jar파일을 찾은뒤 PID를 찾음, awk `{명령 파라미터}`, $1 프로세스 아이디가 해당됨
+CURRENT_PID=$(pgrep -fl $PROJECT_NAME | grep jar | awk '{print $1}')
 
 echo "현재 구동중인 어플리케이션 pid: $CURRENT_PID"
 
