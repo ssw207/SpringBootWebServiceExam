@@ -12,6 +12,8 @@ SpringBoot gradle security oauth2를 활용하여 기본 게시판 등록,수정
 - spring-session-jdbc
 - h2
 
+
+
 ## AWS 세팅
 ### AWS 인스턴스 생성, 로컬 개발환경 구축
 - AWS 프리티어 계정생성

@@ -1,3 +1,6 @@
+# Test클래스에서 PostsRepository @Autowired 되지 않는 이슈
+테스트 클래스의 위치가 Application.class 하위가 아닌경우 SpringBoot가 Bean을 찾지못해 의존성 주입을 하지 못한다.
+
 # TravisCI 빌드중 에러 
 ## 로그
 ```bash
